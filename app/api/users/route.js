@@ -1,5 +1,5 @@
 import prisma from "../../../lib/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { verifyToken } from "../../../lib/auth";
 
 export const dynamic = "force-dynamic";

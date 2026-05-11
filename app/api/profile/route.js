@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireUser } from "../../../lib/auth-helpers";
 import prisma from "../../../lib/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { writeAuditLog } from "../../../lib/audit";
 
 export const dynamic = "force-dynamic";
