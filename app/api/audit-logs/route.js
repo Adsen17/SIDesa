@@ -1,6 +1,8 @@
 import prisma from "../../../lib/db";
 import { requireRoles } from "../../../lib/auth-helpers";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     const auth = requireRoles(req, ["developer", "owner"]);

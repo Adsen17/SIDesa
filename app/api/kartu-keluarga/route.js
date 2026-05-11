@@ -2,6 +2,8 @@ import prisma from "../../../lib/db";
 import { requireRoles, requireUser } from "../../../lib/auth-helpers";
 import { writeAuditLog } from "../../../lib/audit";
 
+export const dynamic = "force-dynamic";
+
 function validateKK(body, isUpdate = false) {
   if (isUpdate && !body.id) return "ID KK wajib ada";
   if (!body.noKK || !/^\d{16}$/.test(body.noKK)) return "No. KK harus 16 digit";

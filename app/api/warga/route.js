@@ -2,6 +2,8 @@ import prisma from "../../../lib/db";
 import { requireRoles, requireUser } from "../../../lib/auth-helpers";
 import { writeAuditLog } from "../../../lib/audit";
 
+export const dynamic = "force-dynamic";
+
 const allowedUmur = ["Bayi", "Remaja", "Dewasa", "Lansia"];
 const allowedAgama = ["Islam", "Kristen", "Katolik", "Buddha", "Hindu", "Konghucu"];
 const allowedSekolah = ["SD", "SMP", "SMA", "Kuliah"];

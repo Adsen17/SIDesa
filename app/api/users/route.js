@@ -2,6 +2,8 @@ import prisma from "../../../lib/db";
 import bcrypt from "bcrypt";
 import { verifyToken } from "../../../lib/auth";
 
+export const dynamic = "force-dynamic";
+
 function getUser(req) {
   const cookie = req.headers.get("cookie") || "";
 

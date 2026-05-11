@@ -4,6 +4,8 @@ import prisma from "../../../lib/db";
 import bcrypt from "bcrypt";
 import { writeAuditLog } from "../../../lib/audit";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     const auth = requireUser(req);
