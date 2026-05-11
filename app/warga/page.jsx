@@ -224,8 +224,8 @@ export default function WargaPage() {
       const exportData = filteredData.map((d, i) => ({
         "No": i + 1,
         "Nama Lengkap": d.nama,
-        "NIK": d.nik,
-        "No. KK": d.kartuKeluarga?.noKK || "-",
+        "NIK": isAdmin(role) ? d.nik : maskNIK(d.nik),
+        "No. KK": d.kartuKeluarga?.noKK ? (isAdmin(role) ? d.kartuKeluarga.noKK : maskNIK(d.kartuKeluarga.noKK)) : "-",
         "Telepon": d.telp,
         "Gender": d.gender === "laki_laki" ? "Laki-laki" : "Perempuan",
         "RT": d.rt,

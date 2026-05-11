@@ -5,6 +5,8 @@ import Link from "next/link";
 import * as XLSX from "xlsx";
 import { popup } from "../../lib/popup";
 import Sidebar from "../components/Sidebar";
+import { maskNIK } from "../utils/mask";
+import { isAdmin } from "../utils/role";
 
 export default function KartuKeluargaPage() {
   const [dataKK, setDataKK] = useState([]);
@@ -12,9 +14,14 @@ export default function KartuKeluargaPage() {
   const [search, setSearch] = useState("");
   const [filterRT, setFilterRT] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     fetchData();
+    fetch("/api/me", { credentials: "include", cache: "no-store" })
+      .then((res) => res.json())
+      .then((res) => setRole(res.role || null))
+      .catch(() => setRole(null));
   }, []);
 
   async function fetchData() {
@@ -60,7 +67,7 @@ export default function KartuKeluargaPage() {
       const exportData = dataKK.flatMap((kk) => {
         if (!kk.anggota || kk.anggota.length === 0) {
           return {
-            "No. KK": kk.noKK,
+            "No. KK": isAdmin(role) ? kk.noKK : maskNIK(kk.noKK),
             "Alamat": kk.alamat,
             "RT": kk.rt,
             "Nama Anggota": "-",
@@ -73,11 +80,11 @@ export default function KartuKeluargaPage() {
         }
 
         return kk.anggota.map((a) => ({
-          "No. KK": kk.noKK,
+          "No. KK": isAdmin(role) ? kk.noKK : maskNIK(kk.noKK),
           "Alamat": kk.alamat,
           "RT": kk.rt,
           "Nama Anggota": a.nama,
-          "NIK": a.nik,
+          "NIK": isAdmin(role) ? a.nik : maskNIK(a.nik),
           "Hubungan KK": a.hubunganKeluarga ? a.hubunganKeluarga.replace(/_/g, " ") : "-",
           "Gender": a.gender === "laki_laki" ? "Laki-laki" : "Perempuan",
           "Pekerjaan": a.pekerjaan || "-",
@@ -273,7 +280,7 @@ export default function KartuKeluargaPage() {
                       <div>
                         <div className="flex items-center gap-3">
                           <h2 className="text-xl font-bold tracking-tight">
-                            No. KK: {kk.noKK}
+                            No. KK: {isAdmin(role) ? kk.noKK : maskNIK(kk.noKK)}
                           </h2>
                           <span className="inline-flex items-center rounded-full bg-blue-500/15 px-3 py-1 text-xs font-medium text-blue-400 ring-1 ring-blue-400/20">
                             {kk.anggota?.length || 0} Anggota
