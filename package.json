@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
     "seed": "node prisma/seed.js",
     "backup:db": "node scripts/backup-db.js",
     "cleanup:login": "node scripts/cleanup-login-attempts.js",
