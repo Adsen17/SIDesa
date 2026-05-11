@@ -6,6 +6,8 @@ import Link from "next/link";
 import BackButton from "../../components/BackButton";
 import { popup } from "../../../lib/popup";
 import Sidebar from "../../components/Sidebar";
+import { maskNIK } from "../../utils/mask";
+import { isAdmin } from "../../utils/role";
 
 export default function DetailKK() {
   const router = useRouter();
@@ -13,6 +15,7 @@ export default function DetailKK() {
   
   const [kk, setKk] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState(null);
   
   // States for adding existing member
   const [showAddModal, setShowAddModal] = useState(false);
@@ -26,6 +29,10 @@ export default function DetailKK() {
       fetchDetail();
       fetchWargaTanpaKK();
     }
+    fetch("/api/me", { credentials: "include", cache: "no-store" })
+      .then((res) => res.json())
+      .then((res) => setRole(res.role || null))
+      .catch(() => setRole(null));
   }, [id]);
 
   async function fetchDetail() {
@@ -147,7 +154,7 @@ export default function DetailKK() {
                 </span>
               </div>
               <h1 className="mt-2 text-3xl font-bold tracking-tight">
-                No. KK: {kk.noKK}
+                No. KK: {isAdmin(role) ? kk.noKK : maskNIK(kk.noKK)}
               </h1>
               <p className="mt-2 text-slate-500 dark:text-slate-400">
                 Alamat: {kk.alamat} — RT {kk.rt}
@@ -202,7 +209,7 @@ export default function DetailKK() {
                   kk.anggota.map((w, index) => (
                     <tr key={w.id} className="transition hover:bg-slate-50 dark:hover:bg-white/[0.02]">
                       <td className="px-6 py-4 text-slate-400">{index + 1}</td>
-                      <td className="px-6 py-4">{w.nik}</td>
+                      <td className="px-6 py-4">{isAdmin(role) ? w.nik : maskNIK(w.nik)}</td>
                       <td className="px-6 py-4 font-medium">{w.nama}</td>
                       <td className="px-6 py-4">
                         <span className="inline-flex rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 dark:bg-white/10 dark:text-slate-300">
