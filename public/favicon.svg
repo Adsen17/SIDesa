@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#081225"/>
+  <!-- House icon representing village -->
+  <path d="M32 12 L52 30 L46 30 L46 52 L36 52 L36 40 L28 40 L28 52 L18 52 L18 30 L12 30 Z" fill="url(#grad1)" opacity="0.95"/>
+  <!-- Door -->
+  <rect x="28" y="40" width="8" height="12" rx="1" fill="#081225" opacity="0.6"/>
+  <!-- Windows -->
+  <rect x="20" y="33" width="7" height="6" rx="1" fill="#081225" opacity="0.5"/>
+  <rect x="37" y="33" width="7" height="6" rx="1" fill="#081225" opacity="0.5"/>
+  <defs>
+    <linearGradient id="grad1" x1="12" y1="12" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+</svg>

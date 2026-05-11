@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  phone     String
+  role      Role     @default(staff)
+  isActive  Boolean  @default(true)
+
+  lastLogin DateTime?
+
+  auditLogs      AuditLog[]
+  loginAttempts  LoginAttempt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model KartuKeluarga {
+  id        String   @id @default(cuid())
+  noKK      String   @unique
+  alamat    String
+  rt        String
+
+  anggota   Warga[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Warga {
+  id           String       @id @default(cuid())
+  nama         String
+  nik          String       @unique
+  telp         String
+  rt           String
+  gender       Gender
+  umur         String
+  tanggalLahir String?
+  agama        Agama?
+  sekolah      Sekolah?
+  status       StatusWarga?
+  pekerjaan    String?
+  kkId         String?
+  hubunganKeluarga HubunganKK?
+
+  kartuKeluarga KartuKeluarga? @relation(fields: [kkId], references: [id], onDelete: SetNull)
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  username    String?
+  action      String
+  entity      String
+  entityId    String?
+  description String?
+  ipAddress   String?
+  userAgent   String?
+  oldValues   Json?
+  newValues   Json?
+  createdAt   DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model LoginAttempt {
+  id         String   @id @default(cuid())
+  username   String
+  ipAddress  String?
+  success    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  userId     String?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([username, createdAt])
+  @@index([ipAddress, createdAt])
+  @@index([success, createdAt])
+}
+
+enum Role {
+  developer
+  owner
+  staff
+}
+
+enum Gender {
+  laki_laki
+  perempuan
+}
+
+enum Agama {
+  Islam
+  Kristen
+  Katolik
+  Buddha
+  Hindu
+  Konghucu
+}
+
+enum Sekolah {
+  SD
+  SMP
+  SMA
+  Kuliah
+}
+
+enum StatusWarga {
+  Hidup
+  Meninggal
+}
+
+enum HubunganKK {
+  Kepala_Keluarga
+  Istri
+  Anak
+  Orang_Tua
+  Mertua
+  Menantu
+  Cucu
+  Saudara
+  Lainnya
+}

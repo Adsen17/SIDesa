@@ -1,0 +1,9 @@
+{
+  "name": "Sistem Informasi Desa",
+  "short_name": "SI Desa",
+  "description": "Sistem manajemen data warga desa",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#081225",
+  "theme_color": "#081225"
+}
