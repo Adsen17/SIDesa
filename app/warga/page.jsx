@@ -499,7 +499,7 @@ export default function WargaPage() {
                           label="NIK"
                           value={isAdmin(role) ? d.nik : maskNIK(d.nik)}
                         />
-                        <MobileInfo label="No. KK" value={d.kartuKeluarga?.noKK || "-"} />
+                        <MobileInfo label="No. KK" value={d.kartuKeluarga?.noKK ? (isAdmin(role) ? d.kartuKeluarga.noKK : maskNIK(d.kartuKeluarga.noKK)) : "-"} />
                         <MobileInfo label="Telepon" value={d.telp} />
                         <MobileInfo
                           label="Gender"
@@ -644,7 +644,7 @@ export default function WargaPage() {
                           <td className="px-4 py-4">
                             {isAdmin(role) ? d.nik : maskNIK(d.nik)}
                           </td>
-                          <td className="px-4 py-4">{d.kartuKeluarga?.noKK || "-"}</td>
+                          <td className="px-4 py-4">{d.kartuKeluarga?.noKK ? (isAdmin(role) ? d.kartuKeluarga.noKK : maskNIK(d.kartuKeluarga.noKK)) : "-"}</td>
                           <td className="px-4 py-4">{d.telp}</td>
                           <td className="px-4 py-4 capitalize">
                             {String(d.gender).replace("_", " ")}
