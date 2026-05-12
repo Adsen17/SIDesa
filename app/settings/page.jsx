@@ -344,6 +344,11 @@ export default function SettingsPage() {
                             <p className="font-semibold">{u.username}</p>
                             <p className="mt-1 text-sm text-slate-400">
                               {u.phone} • {u.role}
+                              {!u.isActive && (
+                                <span className="ml-2 inline-flex rounded-full bg-rose-500/15 px-2 py-0.5 text-[11px] font-medium text-rose-300 ring-1 ring-rose-400/20">
+                                  Nonaktif
+                                </span>
+                              )}
                             </p>
                           </div>
 
@@ -423,6 +428,30 @@ export default function SettingsPage() {
                   Staff
                 </option>
               </select>
+
+              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-white">Status Akun</p>
+                  <p className="text-xs text-slate-400">
+                    {editingUser.isActive ? "Akun aktif dan bisa login" : "Akun dinonaktifkan, tidak bisa login"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setEditingUser({ ...editingUser, isActive: !editingUser.isActive })
+                  }
+                  className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
+                    editingUser.isActive ? "bg-emerald-500" : "bg-slate-600"
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+                      editingUser.isActive ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+              </div>
             </div>
 
             <div className="mt-6 flex justify-end gap-3">

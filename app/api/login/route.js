@@ -30,7 +30,6 @@ export async function POST(req) {
     const recentFailedAttempts = await prisma.loginAttempt.count({
       where: {
         username,
-        ipAddress,
         success: false,
         createdAt: {
           gte: blockSince,
