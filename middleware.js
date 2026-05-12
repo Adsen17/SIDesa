@@ -85,5 +85,6 @@ export const config = {
     "/warga/:path*",
     "/kartu-keluarga/:path*",
     "/audit-log/:path*",
+    "/profile/:path*",
   ],
 };

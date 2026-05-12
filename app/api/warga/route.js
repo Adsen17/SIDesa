@@ -38,6 +38,7 @@ function sanitizeWargaInput(body) {
     sekolah: body.sekolah ? String(body.sekolah).trim() : null,
     status: body.status ? String(body.status).trim() : null,
     pekerjaan: body.pekerjaan ? String(body.pekerjaan).trim() : null,
+    alamat: body.alamat ? String(body.alamat).trim() : null,
     kkId: body.kkId ? String(body.kkId).trim() : null,
     hubunganKeluarga: body.hubunganKeluarga ? String(body.hubunganKeluarga).trim() : null,
   };
@@ -137,8 +138,14 @@ export async function POST(req) {
           data: {
             noKK,
             rt: body.rt || "1",
-            alamat: "Alamat belum diatur (Otomatis dari Excel)",
+            alamat: body.alamat || "Alamat belum diatur",
           }
+        });
+      } else if (body.alamat && (kk.alamat === "Alamat belum diatur" || kk.alamat === "Alamat belum diatur (Otomatis dari Excel)")) {
+        // Update alamat KK jika sebelumnya belum diatur
+        kk = await prisma.kartuKeluarga.update({
+          where: { id: kk.id },
+          data: { alamat: body.alamat },
         });
       }
       kkIdToUse = kk.id;
@@ -217,8 +224,13 @@ export async function PUT(req) {
           data: {
             noKK,
             rt: body.rt || "1",
-            alamat: "Alamat belum diatur (Otomatis dari Excel)",
+            alamat: body.alamat || "Alamat belum diatur",
           }
+        });
+      } else if (body.alamat && (kk.alamat === "Alamat belum diatur" || kk.alamat === "Alamat belum diatur (Otomatis dari Excel)")) {
+        kk = await prisma.kartuKeluarga.update({
+          where: { id: kk.id },
+          data: { alamat: body.alamat },
         });
       }
       kkIdToUse = kk.id;
@@ -238,6 +250,7 @@ export async function PUT(req) {
         sekolah: body.sekolah,
         status: body.status,
         pekerjaan: body.pekerjaan,
+        alamat: body.alamat,
         kkId: kkIdToUse,
         hubunganKeluarga: body.hubunganKeluarga,
       },

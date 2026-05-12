@@ -15,6 +15,7 @@ const data = [
     "Sekolah": "SMA",
     "Status": "Hidup",
     "Pekerjaan": "Wiraswasta",
+    "Alamat": "Jl. Merdeka No. 10, RT 01 RW 02",
     "No KK": "9876543210987654",
     "Hubungan Keluarga": "Kepala Keluarga"
   },
@@ -30,6 +31,7 @@ const data = [
     "Sekolah": "SMA",
     "Status": "Hidup",
     "Pekerjaan": "Ibu Rumah Tangga",
+    "Alamat": "Jl. Merdeka No. 10, RT 01 RW 02",
     "No KK": "9876543210987654",
     "Hubungan Keluarga": "Istri"
   }

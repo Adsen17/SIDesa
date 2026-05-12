@@ -49,6 +49,7 @@ model Warga {
   sekolah      Sekolah?
   status       StatusWarga?
   pekerjaan    String?
+  alamat       String?
   kkId         String?
   hubunganKeluarga HubunganKK?
 

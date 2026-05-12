@@ -14,7 +14,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Legend,
 } from "recharts";
 
 export default function DashboardPage() {
@@ -82,13 +81,6 @@ export default function DashboardPage() {
       normalize(d.gender).includes("perempuan")
     ).length;
 
-    const umurMap = {
-      Bayi: 0,
-      Remaja: 0,
-      Dewasa: 0,
-      Lansia: 0,
-    };
-
     const rtMap = {
       "1": 0,
       "2": 0,
@@ -97,38 +89,22 @@ export default function DashboardPage() {
       "5": 0,
     };
 
-    const agamaMap = {};
-    const sekolahMap = {};
     const statusMap = { Hidup: 0, Meninggal: 0 };
     const hubunganMap = {};
-    const pekerjaanMap = {};
 
     data.forEach((d) => {
-      const umur = normalize(d.umur);
       const rt = String(d.rt || "").trim();
 
-      if (umur === "bayi") umurMap.Bayi++;
-      else if (umur === "remaja") umurMap.Remaja++;
-      else if (umur === "dewasa") umurMap.Dewasa++;
-      else if (umur === "lansia") umurMap.Lansia++;
-
       if (rtMap[rt] !== undefined) rtMap[rt]++;
-      
-      const agama = d.agama || "Belum Diatur";
-      const sekolah = d.sekolah || "Belum Diatur";
+
       const status = d.status || "Hidup";
       const hubungan = d.hubunganKeluarga ? d.hubunganKeluarga.replace(/_/g, " ") : "Belum Diatur";
-      const pekerjaan = d.pekerjaan || "Belum Bekerja";
 
-      agamaMap[agama] = (agamaMap[agama] || 0) + 1;
-      sekolahMap[sekolah] = (sekolahMap[sekolah] || 0) + 1;
-      
       if (status === "Hidup") statusMap.Hidup++;
       else if (status === "Meninggal") statusMap.Meninggal++;
       else statusMap.Hidup++; // fallback
-      
+
       hubunganMap[hubungan] = (hubunganMap[hubungan] || 0) + 1;
-      pekerjaanMap[pekerjaan] = (pekerjaanMap[pekerjaan] || 0) + 1;
     });
 
     return {
@@ -137,17 +113,11 @@ export default function DashboardPage() {
       perempuan,
       totalKK: dataKK.length,
       totalRT: Object.keys(rtMap).length,
-      umurChart: Object.keys(umurMap).map((k) => ({
-        name: k,
-        total: umurMap[k],
-      })),
       rtChart: Object.keys(rtMap).map((rt) => ({
         name: `RT ${rt}`,
         total: rtMap[rt],
       })),
       rtMap,
-      agamaChart: Object.keys(agamaMap).map((k) => ({ name: k, value: agamaMap[k] })),
-      sekolahChart: Object.keys(sekolahMap).map((k) => ({ name: k, total: sekolahMap[k] })).sort((a,b) => b.total - a.total),
       statusChart: [
         { name: "Hidup", value: statusMap.Hidup },
         { name: "Meninggal", value: statusMap.Meninggal },
@@ -155,21 +125,10 @@ export default function DashboardPage() {
       hubunganChart: Object.keys(hubunganMap)
         .map((k) => ({ name: k, total: hubunganMap[k] }))
         .sort((a, b) => b.total - a.total),
-      pekerjaanChart: Object.keys(pekerjaanMap)
-        .map((k) => ({ name: k, total: pekerjaanMap[k] }))
-        .sort((a, b) => b.total - a.total)
-        .slice(0, 10), // Take top 10 pekerjaan
     };
   }, [data, dataKK]);
 
-  const genderData = [
-    { name: "Laki-laki", value: stats.laki },
-    { name: "Perempuan", value: stats.perempuan },
-  ];
-
-  const COLORS_GENDER = ["#3b82f6", "#ec4899"];
   const COLORS_STATUS = ["#10b981", "#ef4444"];
-  const COLORS_AGAMA = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#14b8a6", "#64748b"];
 
   return (
     <div className="flex min-h-screen overflow-hidden bg-[#081225] text-white">
@@ -246,7 +205,7 @@ export default function DashboardPage() {
                   Dashboard Data Warga Desa
                 </h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
-                  Pantau statistik utama, distribusi gender, kategori umur, dan
+                  Pantau statistik utama, status penduduk, hubungan keluarga, dan
                   persebaran warga per RT dalam satu tampilan modern.
                 </p>
               </div>
@@ -326,38 +285,13 @@ export default function DashboardPage() {
             ))}
           </motion.section>
 
-          {/* CHARTS: PIE */}
+          {/* CHARTS */}
           <motion.section 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-6"
+            className="grid grid-cols-1 gap-5 xl:grid-cols-2 xl:gap-6"
           >
-            <ChartCard
-              title="Perbandingan Gender"
-              subtitle="Komposisi warga berdasarkan jenis kelamin"
-            >
-              <div className="h-[260px] sm:h-[300px] md:h-[320px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={genderData}
-                      dataKey="value"
-                      outerRadius="72%"
-                      innerRadius="40%"
-                      paddingAngle={4}
-                    >
-                      {COLORS_GENDER.map((c, i) => (
-                        <Cell key={i} fill={c} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </ChartCard>
-
             <ChartCard
               title="Status Penduduk"
               subtitle="Perbandingan warga hidup dan meninggal"
@@ -377,102 +311,16 @@ export default function DashboardPage() {
                       ))}
                     </Pie>
                     <Tooltip />
-                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </ChartCard>
 
-            <ChartCard
-              title="Agama"
-              subtitle="Proporsi penduduk berdasarkan agama"
-            >
-              <div className="h-[260px] sm:h-[300px] md:h-[320px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={stats.agamaChart}
-                      dataKey="value"
-                      outerRadius="72%"
-                      innerRadius="40%"
-                      paddingAngle={4}
-                    >
-                      {stats.agamaChart.map((_, i) => (
-                        <Cell key={i} fill={COLORS_AGAMA[i % COLORS_AGAMA.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </ChartCard>
-          </motion.section>
-
-          {/* CHARTS: BAR ROW 1 */}
-          <motion.section 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="grid grid-cols-1 gap-5 xl:grid-cols-2 xl:gap-6"
-          >
-            <ChartCard
-              title="Kategori Umur"
-              subtitle="Distribusi warga berdasarkan kategori usia"
-            >
-              <div className="h-[260px] sm:h-[300px] md:h-[320px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={stats.umurChart}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
-                    <YAxis stroke="#94a3b8" fontSize={12} />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                      dataKey="total"
-                      fill="#6366f1"
-                      radius={[12, 12, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </ChartCard>
-
-            <ChartCard
-              title="Pendidikan Terakhir"
-              subtitle="Persebaran warga berdasarkan jenjang pendidikan"
-            >
-              <div className="h-[260px] sm:h-[300px] md:h-[320px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={stats.sekolahChart}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
-                    <YAxis stroke="#94a3b8" fontSize={12} />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                      dataKey="total"
-                      fill="#f43f5e"
-                      radius={[12, 12, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </ChartCard>
-          </motion.section>
-
-          {/* CHARTS: BAR ROW 2 */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            className="grid grid-cols-1 gap-5 xl:grid-cols-2 xl:gap-6"
-          >
             <ChartCard
               title="Hubungan Keluarga"
               subtitle="Jumlah warga berdasarkan perannya dalam KK"
             >
-              <div className="h-[280px] sm:h-[320px] md:h-[340px]">
+              <div className="h-[260px] sm:h-[300px] md:h-[320px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={stats.hubunganChart}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -488,7 +336,15 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               </div>
             </ChartCard>
+          </motion.section>
 
+          {/* CHART: Distribusi RT */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="grid grid-cols-1 gap-5 xl:gap-6"
+          >
             <ChartCard
               title="Distribusi Warga per RT"
               subtitle="Perbandingan jumlah warga di setiap RT"
@@ -504,35 +360,6 @@ export default function DashboardPage() {
                       dataKey="total"
                       fill="#10b981"
                       radius={[12, 12, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </ChartCard>
-          </motion.section>
-
-          {/* CHARTS: BAR ROW 3 */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="grid grid-cols-1 gap-5 xl:gap-6"
-          >
-            <ChartCard
-              title="Statistik Pekerjaan Warga"
-              subtitle="10 pekerjaan terbanyak yang ditekuni warga"
-            >
-              <div className="h-[280px] sm:h-[320px] md:h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={stats.pekerjaanChart} layout="vertical">
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.15} horizontal={false} />
-                    <XAxis type="number" stroke="#94a3b8" fontSize={12} />
-                    <YAxis type="category" dataKey="name" stroke="#94a3b8" fontSize={11} width={100} />
-                    <Tooltip />
-                    <Bar
-                      dataKey="total"
-                      fill="#0ea5e9"
-                      radius={[0, 12, 12, 0]}
                     />
                   </BarChart>
                 </ResponsiveContainer>

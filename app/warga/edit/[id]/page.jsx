@@ -24,6 +24,7 @@ export default function EditWarga() {
     kkId: "",
     hubunganKeluarga: "",
     pekerjaan: "",
+    alamat: "",
   });
   const [kkList, setKkList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -143,6 +144,7 @@ export default function EditWarga() {
     { label: "Sekolah", value: form.sekolah },
     { label: "Status", value: form.status },
     { label: "Pekerjaan", value: form.pekerjaan },
+    { label: "Alamat", value: form.alamat || "-" },
     { label: "RT", value: `RT ${form.rt}` },
     { label: "Kartu Keluarga", value: kkList.find(k => k.id === form.kkId)?.noKK || "-" },
     { label: "Hubungan KK", value: form.hubunganKeluarga?.replace("_", " ") || "-" },
@@ -270,6 +272,19 @@ export default function EditWarga() {
               value={form.pekerjaan || ""}
               onChange={(value) => setForm({ ...form, pekerjaan: value })}
             />
+
+            <div className="col-span-1 md:col-span-2">
+              <label className="mb-2 block text-sm font-medium text-slate-600 dark:text-slate-300">
+                Alamat
+              </label>
+              <textarea
+                placeholder="Masukkan alamat lengkap warga"
+                value={form.alamat || ""}
+                onChange={(e) => setForm({ ...form, alamat: e.target.value })}
+                rows={3}
+                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
+              />
+            </div>
 
             <div className="col-span-1 md:col-span-2 mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
               <h3 className="text-sm font-semibold mb-4">Informasi Kartu Keluarga (Opsional)</h3>

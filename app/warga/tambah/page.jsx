@@ -26,6 +26,7 @@ export default function TambahWarga() {
     kkId: "",
     hubunganKeluarga: "",
     pekerjaan: "",
+    alamat: "",
   });
 
   const [kkList, setKkList] = useState([]);
@@ -189,6 +190,7 @@ export default function TambahWarga() {
             const sekolah = String(item.Sekolah || "").trim();
             const status = String(item.Status || "").trim();
             const pekerjaan = String(item.Pekerjaan || "").trim();
+            const alamat = String(item.Alamat || "").trim();
             const noKK = String(item["No KK"] || "").trim();
             let hubunganKeluarga = String(item["Hubungan Keluarga"] || "").trim().replace(" ", "_");
 
@@ -228,6 +230,7 @@ export default function TambahWarga() {
                   sekolah,
                   status,
                   pekerjaan,
+                  alamat,
                   kkId,
                   noKK,
                   hubunganKeluarga,
@@ -270,6 +273,7 @@ export default function TambahWarga() {
     { label: "Sekolah", value: form.sekolah },
     { label: "Status", value: form.status },
     { label: "Pekerjaan", value: form.pekerjaan },
+    { label: "Alamat", value: form.alamat || "-" },
     { label: "RT", value: `RT ${form.rt}` },
     { label: "Kartu Keluarga", value: kkList.find(k => k.id === form.kkId)?.noKK || "-" },
     { label: "Hubungan KK", value: form.hubunganKeluarga?.replace("_", " ") || "-" },
@@ -391,6 +395,19 @@ export default function TambahWarga() {
                 placeholder="Contoh: Petani, Buruh, Guru"
               />
 
+              <div className="col-span-1 md:col-span-2">
+                <label className="mb-2 block text-sm font-medium text-slate-600 dark:text-slate-300">
+                  Alamat
+                </label>
+                <textarea
+                  placeholder="Masukkan alamat lengkap warga"
+                  value={form.alamat}
+                  onChange={(e) => setForm({ ...form, alamat: e.target.value })}
+                  rows={3}
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800"
+                />
+              </div>
+
               <div className="col-span-1 md:col-span-2 mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
                 <h3 className="text-sm font-semibold mb-4">Informasi Kartu Keluarga (Opsional)</h3>
                 <div className="grid gap-4 md:grid-cols-2">
@@ -458,7 +475,7 @@ export default function TambahWarga() {
                 className="block w-full text-sm text-slate-500 file:mr-4 file:rounded-xl file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-blue-700"
               />
               <p className="mt-3 text-xs text-slate-400">
-                Gunakan header: Nama, NIK, Telepon, Gender, Umur, RT, Tanggal Lahir, Agama, Sekolah, Status, Pekerjaan, No KK, Hubungan Keluarga
+                Gunakan header: Nama, NIK, Telepon, Gender, Umur, RT, Tanggal Lahir, Agama, Sekolah, Status, Pekerjaan, Alamat, No KK, Hubungan Keluarga
               </p>
             </div>
 
